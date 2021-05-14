@@ -1,6 +1,6 @@
 # bot.py
 import os
-import requests
+import requests as req
 from bs4 import BeautifulSoup as bs
 import discord
 from discord.ext import commands
@@ -22,8 +22,17 @@ async def ping(ctx):
     await ctx.channel.send('Pong! {:.2f}ms'.format(bot.latency))
 
 @bot.command()
-async def m(ctx, *arg):
-    mName = " ".join(arg[:])
-    await ctx.channel.send(f'So, you wanna watch {mName}, huh?')
+async def watch(ctx, *arg):
+    if(len(arg)!=0):
+        home = 'https://www.f2movies.to'
+        url = home + '/search/' + '-'.join(arg)
+        page = req.get(url)
+        soup = bs(page.text,'html.parser')
+        partLink = str(soup.find_all('a',class_='film-poster-ahref flw-item-tip',href=True)[0]['href'])
+        await ctx.channel.send(home+partLink)
+    
+    else:
+        await ctx.channel.send('Usage: - $watch moviename')
+    
 
 bot.run(TOKEN)
