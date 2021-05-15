@@ -12,14 +12,14 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 
 
-bot = commands.Bot(command_prefix="$")
+bot = commands.Bot(command_prefix="$", help_command=None)
 
 @bot.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(bot))
 
 @bot.command()
-async def how(ctx):
+async def help(ctx):
     embed=discord.Embed(title="bOTT - TV and Movies", description="Commands: -")
     embed.set_thumbnail(url="https://res.cloudinary.com/horizon3902/image/upload/v1621056104/color_logo_with_background_pvoe1n.png")
     embed.add_field(name="$watch titlename", value="Sends link of requested title", inline=False)
