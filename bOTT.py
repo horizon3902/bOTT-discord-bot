@@ -52,6 +52,7 @@ async def imdb(ctx, *arg):
         page = req.get(url)
         soup = bs(page.text,'html.parser')
         result = soup.find_all('td', class_='result_text')[0].find('a')['href']
+        title = soup.find_all('td', class_='result_text')[0].find('a').text
         hit = home + result
         rpage = req.get(hit)
         rsoup = bs(rpage.text,'html.parser')
