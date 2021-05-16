@@ -21,7 +21,7 @@ async def on_ready():
 
 @bot.command()
 async def help(ctx):
-    embed=discord.Embed(title="bOTT - TV and Movies", description="Commands: -")
+    embed=discord.Embed(title="bOTT - TV and Movies", description="Get the link for your movie or TV show, join a voice channel and share your screen with your friends to watch a movie together!\n\nCommands: -")
     embed.set_thumbnail(url="https://res.cloudinary.com/horizon3902/image/upload/v1621056104/color_logo_with_background_pvoe1n.png")
     embed.add_field(name="$watch titlename", value="Sends link of requested title", inline=False)
     embed.add_field(name="$imdb tiltename", value="Shows IMDb rating of requested title", inline=False)
