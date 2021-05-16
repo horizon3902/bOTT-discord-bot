@@ -59,10 +59,14 @@ async def imdb(ctx, *arg):
         rating = rsoup.find_all('span',class_='rating')[0].text
         embed=discord.Embed(title='IMDb Rating')
         embed.add_field(name=title, value=rating, inline=False)
+        embed.add_field(name="Visit the IMDb Page: -", value=f"[{title}]({hit})", inline=False)
         await ctx.send(embed=embed)
 
     else:
         await ctx.channel.send('Usage: - $imdb titlename')
+
+
+
     
         
 
