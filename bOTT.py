@@ -17,7 +17,9 @@ bot = commands.Bot(command_prefix="$", help_command=None)
 
 @bot.event
 async def on_ready():
+    servers = list(bot.guilds)
     print('We have logged in as {0.user}'.format(bot))
+    print('\n'.join(guild.name for guild in servers))
 
 @bot.command()
 async def help(ctx):
