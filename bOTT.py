@@ -60,7 +60,7 @@ async def imdb(ctx, *arg):
         hit = home + result
         rpage = req.get(hit)
         rsoup = bs(rpage.text,'html.parser')
-        rating = rsoup.find_all('span',class_='rating')[0].text
+        rating = rsoup.find_all('span',class_='AggregateRatingButton__RatingScore-sc-1ll29m0-1 iTLWoV')[0].text
         embed=discord.Embed(title='IMDb Rating')
         embed.add_field(name=title, value=rating, inline=False)
         embed.add_field(name="Visit the IMDb Page: -", value=f"[{title}]({hit})", inline=False)
