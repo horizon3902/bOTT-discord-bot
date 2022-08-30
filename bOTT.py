@@ -7,13 +7,17 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import urllib
 from re import findall
+from imdb import Cinemagoer, IMDbError
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
+i = Cinemagoer()
 
-
-bot = commands.Bot(command_prefix="$", help_command=None)
+intents=discord.Intents.default()
+intents.messages = True
+intents.message_content = True
+bot = commands.Bot(command_prefix="$", help_command=None, intents=intents)
 
 @bot.event
 async def on_ready():
@@ -50,21 +54,13 @@ async def watch(ctx, *arg):
 @bot.command()
 async def imdb(ctx, *arg):
     if(len(arg)!=0):
-        home = 'https://www.imdb.com'
-        title = ' '.join(arg)
-        url = home + '/find?q=' + urllib.parse.quote(title)
-        page = req.get(url)
-        soup = bs(page.text,'html.parser')
-        result = soup.find_all('td', class_='result_text')[0].find('a')['href']
-        title = soup.find_all('td', class_='result_text')[0].find('a').text
-        hit = home + result
-        rpage = req.get(hit)
-        rsoup = bs(rpage.text,'html.parser')
-        rating = rsoup.find_all('span',class_='AggregateRatingButton__RatingScore-sc-1ll29m0-1 iTLWoV')[0].text
+        movies = i.search_movie((' ').join(arg).lower(), results=1)
+        i.update(movies[0])
         embed=discord.Embed(title='IMDb Rating')
-        rating = rating+"/10"
-        embed.add_field(name=title, value=rating, inline=False)
-        embed.add_field(name="Visit the IMDb Page: -", value=f"[{title}]({hit})", inline=False)
+        rating = movies[0]['rating']
+        embed.add_field(name=movies[0]['title'], value=rating, inline=False)
+        embed.add_field(name="Visit the IMDb Page: -", value=f"https://imdb.com/title/tt{movies[0].getID()}",
+                        inline=False)
         await ctx.send(embed=embed)
 
     else:
