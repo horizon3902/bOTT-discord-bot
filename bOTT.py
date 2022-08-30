@@ -46,8 +46,11 @@ async def watch(ctx, *arg):
         url = home + '/search/' + '-'.join(arg)
         page = req.get(url)
         soup = bs(page.text,'html.parser')
-        partLink = str(soup.find_all('a',class_='film-poster-ahref flw-item-tip',href=True)[0]['href'])
-        await ctx.channel.send(home+partLink)
+        partLink = soup.find_all('a',class_='film-poster-ahref flw-item-tip',href=True)
+        await ctx.channel.send('Top results:-')
+        for idx, x in enumerate(partLink[:3]):
+            await ctx.channel.send(f'{idx+1}.')
+            await ctx.channel.send(home+str(x['href']))
     else:
         await ctx.channel.send('Usage: - $watch moviename')
 
@@ -59,8 +62,11 @@ async def imdb(ctx, *arg):
         embed=discord.Embed(title='IMDb Rating')
         rating = movies[0]['rating']
         embed.add_field(name=movies[0]['title'], value=rating, inline=False)
-        embed.add_field(name="Visit the IMDb Page: -", value=f"https://imdb.com/title/tt{movies[0].getID()}",
+        embed.add_field(name="Visit the IMDb Page: -",
+                        value=f"https://imdb.com/title/tt{movies[0].getID()}\nPro Tip: If incorrect result displayed, "
+                              f"try adding year of movie/tv show to the query",
                         inline=False)
+        embed.set_thumbnail(url=movies[0]['full-size cover url'])
         await ctx.send(embed=embed)
 
     else:
