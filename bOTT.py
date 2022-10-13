@@ -82,4 +82,32 @@ async def trailer(ctx, *arg):
     vidlink = "https://www.youtube.com/watch?v=" + vid
     await ctx.channel.send(vidlink)
 
+@bot.command()
+async def trending(ctx, *arg):
+    if(arg[0] in ['movie','tv']):
+        api_key = os.getenv('TMDB_API_KEY')
+        base_url = "https://api.themoviedb.org/3/trending"
+        thumb_base_url = "https://image.tmdb.org/t/p/w500"
+        url = base_url + '/' + arg[0] + '/day?api_key=' + api_key
+        r = req.get(url)
+        data = r.json()
+        await ctx.channel.send('Top 5 Trending ' + arg[0] + 's:-')
+        for entity in data['results'][:5]:
+            if(arg[0]=='movie'):
+                embed=discord.Embed(title=entity['title'])
+                embed.add_field(name="Visit the TMDb Page: -",
+                            value=f"https://tmdb.com/movie/{entity['id']}",
+                            inline=False)
+            elif(arg[0]=='tv'):
+                embed=discord.Embed(title=entity['name'])
+                embed.add_field(name="Visit the TMDb Page: -",
+                            value=f"https://tmdb.com/tv/{entity['id']}",
+                            inline=False)
+            # embed.add_field(name="Overview", value=entity['overview'], inline=False)
+            embed.set_thumbnail(url=thumb_base_url + entity['poster_path'])
+            await ctx.send(embed=embed)
+            
+    else:
+        await ctx.channel.send('Usage: - $trending tv / $trending movie')
+
 bot.run(TOKEN)
